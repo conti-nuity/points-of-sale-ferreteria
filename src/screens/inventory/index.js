@@ -4,9 +4,10 @@ import styled from "styled-components";
 import { InventoryWrapper, Header, Title, Description } from "./styles";
 import { WrapperContent } from "../../styles";
 import { AddInventoryForm } from "./AddInventoryForm";
-import { SearchProduct } from "./SearchProduct";
 import { Modal } from "../../components/Modal";
+import { useFinder } from "../../hooks/useFinder";
 import { ProductCard } from "./ProductCard";
+import { useStockStore } from "../../store";
 
 const Content = styled.div`
   margin-top: 60px;
@@ -30,10 +31,40 @@ const HeaderInfo = styled.div`
   }
 `;
 
+const StockLength = styled.p`
+  font-size: 13px;
+  font-weight: 400;
+  color: #000;
+`;
+
+const Input = styled.input`
+  position: sticky;
+  top: 20px;
+  margin-top: 20px;
+  padding: 17px;
+  width: 100%;
+  border-radius: 6px;
+  border: none;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0), 0 4px 8px rgba(0, 0, 0, 0.03);
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
 export const Inventory = () => {
   const [isShowModal, setShowModal] = useState(false);
   const [productsLegacy, setProductsLegacy] = useState([]);
   const [productSelected, setProductSelected] = useState({});
+
+  // Store
+  const stock = useStockStore((state) => state.stock);
+  const setStock = useStockStore((state) => state.setStock);
+
+  // Filter value
+  const [filterName, setFilterName] = useState(null);
+
+  // Finder
+  const filteredData = useFinder(filterName, stock);
 
   const productEdit = (product) => {
     setShowModal(true);
@@ -56,6 +87,7 @@ export const Inventory = () => {
         <Header>
           <div>
             <Title>Inventario</Title>
+            <StockLength>{stock.length} Productos</StockLength>
           </div>
           <div>
             <button onClick={() => setShowModal(true)}>
@@ -67,7 +99,10 @@ export const Inventory = () => {
           Inventario del mes de {monthMinusOneName} del{" "}
           {new window.Date().getFullYear()}
         </Description>
-        <SearchProduct setProductsLegacy={setProductsLegacy} />
+        <Input
+          placeholder="Buscar producto..."
+          onChange={(e) => setFilterName(e.target.value)}
+        />
         <Content>
           <HeaderInfo>
             <div>
@@ -81,7 +116,7 @@ export const Inventory = () => {
             </div>
             <div />
           </HeaderInfo>
-          {productsLegacy.map((product, index) => (
+          {filteredData.map((product, index) => (
             <ProductCard
               key={index}
               product={product}

@@ -5,7 +5,8 @@ import { Checkbox } from "../../components/Checkbox";
 import { Input } from "../../components/Input";
 import { Field, ButtonAdd } from "../../styles/GlobalStyles";
 import { useEffectOnce } from "../../utils/useEffectOnce";
-
+import { useStockStore } from "../../store";
+import { getRandomArbitrary } from "../../utils/funcitons";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { toastModel } from "../../utils/toast";
@@ -119,9 +120,18 @@ export const AddInventoryForm = ({ product, setShowModal }) => {
 
   const [loading, setLoading] = useState(false);
 
+  // Store
+  const stock = useStockStore((state) => state.stock);
+  const setStock = useStockStore((state) => state.setStock);
+
   const onSubmit = (dataForm) => {
     setLoading(true);
     if (itsForEdit) {
+      const edited_product = { uuid: product.uuid, ...dataForm };
+      const filter_stock = stock.filter((item) => item.uuid !== product.uuid);
+      let new_filter_stock = filter_stock.slice();
+      new_filter_stock.splice(1, 0, edited_product);
+      setStock(new_filter_stock);
       updateProducttoInventory(product.uuid, dataForm)
         .then((response) => {
           reset();
@@ -139,8 +149,13 @@ export const AddInventoryForm = ({ product, setShowModal }) => {
           );
         });
     } else {
-      addProducttoInventory(dataForm)
+      // console.log("dataForm", dataForm);
+      let uuid = getRandomArbitrary(2, 3000000);
+      const new_product = { created_at: new window.Date(), uuid, ...dataForm };
+      const new_stock = [{ ...new_product }, ...stock];
+      addProducttoInventory(new_product)
         .then((response) => {
+          setStock(new_stock);
           reset();
           toast.success("Producto agregado exitosamente!", {
             ...toastModel,

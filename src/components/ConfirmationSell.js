@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { db } from "../firebase";
 import { getRandomArbitrary } from "../utils/funcitons";
+import { useSalesStore } from "../store";
+import { addSale } from "../api/sales";
+import { updateStock } from "../api/stock";
 
 const ContentModalConfirmationSell = styled.div`
   & h1 {
@@ -57,12 +59,29 @@ export const ConfirmationSell = ({
   changeOfSale,
   setShowModal,
 }) => {
-  const [status, setStatus] = useState();
+  // Store
+  const sales = useSalesStore((state) => state.sales);
+  const setSales = useSalesStore((state) => state.setSales);
+
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
+
+  const cleanCart = () => {
+    setCart([]);
+    setEntry(0);
+    setTotal(0);
+  };
+
   const finalizeSale = (withTicket) => {
     withTicket ? setLoading2(true) : setLoading1(true);
-    const uuid = getRandomArbitrary(2, 3000000);
+
+    const date = new window.Date();
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const saleId = `${day}${month}${year}`;
+
+    let uuid = getRandomArbitrary(2, 3000000);
 
     const products = cart.map((cart) => {
       return {
@@ -76,7 +95,8 @@ export const ConfirmationSell = ({
       };
     });
 
-    console.log("run", {
+    // Sale Information
+    const sale = {
       uuid,
       created_at: new window.Date(),
       products: [...products],
@@ -86,65 +106,37 @@ export const ConfirmationSell = ({
         entryOfSale: parseInt(entry).toFixed(2),
         changeOfSale: changeOfSale,
       },
-    });
-    db.collection("sales")
-      .doc(uuid)
-      .set({
-        uuid,
-        created_at: new window.Date(),
-        products: [...products],
-        info: {
-          totalPriceSell: totalSell,
-          totalDealer: totalDealer,
-          entryOfSale: parseInt(entry).toFixed(2),
-          changeOfSale: changeOfSale,
-        },
-      })
-      .then((response) => {
+    };
+
+    // Add new sale
+    addSale(saleId, [sale, ...sales])
+      .then(() => {
+        // Change sales stock
+        setSales([{ ...sale }, ...sales]);
         cart.map((product) => {
+          // Change Stock
           if (product.index >= 0) {
-            db.collection("stock")
-              .doc(`${product.uuid}`)
-              .update({
-                stock: product.stock - product.quantityAdded,
-              })
-              .then((res) => {
-                setCart([]);
-                setEntry(0);
-                setTotal(0);
+            updateStock(product)
+              .then(() => {
+                cleanCart();
                 withTicket ? setLoading2(false) : setLoading1(false);
                 setShowModal(false);
                 withTicket && window.open(`/print-ticket/${uuid}`, "_blank");
               })
-              .catch((error) => {
+              .catch(() => {
                 withTicket ? setLoading2(false) : setLoading1(false);
-                setStatus(
-                  "Ocurrio un error al cambiar el inventario, intenta ponerte en contacto con el desarrollador"
-                );
-                console.log(
-                  error,
-                  "Ocurrio un error al cambiar el inventario, intenta ponerte en contacto con el desarrollador"
-                );
               });
           } else {
-            setCart([]);
-            setEntry(0);
-            setTotal(0);
-            withTicket ? setLoading2(false) : setLoading1(false);
+            console.log("Run clean");
+            cleanCart();
             setShowModal(false);
+            withTicket ? setLoading2(false) : setLoading1(false);
             withTicket && window.open(`/print-ticket/${uuid}`, "_blank");
           }
         });
       })
-      .catch((error) => {
+      .catch(() => {
         withTicket ? setLoading2(false) : setLoading1(false);
-        setStatus(
-          "Ocurrio un error al proceder con la venta, intenta ponerte en contacto con el desarrollador"
-        );
-        console.log(
-          error,
-          "Ocurrio un error al proceder con la venta, intenta ponerte en contacto con el desarrollador"
-        );
       });
   };
 

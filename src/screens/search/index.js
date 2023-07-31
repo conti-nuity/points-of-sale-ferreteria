@@ -4,12 +4,14 @@ import styled from "styled-components";
 import { WrapperContent, DescriptionContent } from "../../styles";
 import { ProductCard } from "./ProductCard";
 import { Cart } from "../../components/cart";
-import { db } from "../../firebase";
 import { useMediaQuery } from "react-responsive";
 import { DrawerCart } from "../../components/cart/DrawerCart";
+import { getStock } from "../../api/stock";
+import { useStockStore } from "../../store";
+import { useFinder } from "../../hooks/useFinder";
 
 const Content = styled.div`
-  margin-top: 60px;
+  margin-top: 30px;
 `;
 
 const HeaderInfo = styled.div`
@@ -31,7 +33,7 @@ const HeaderInfo = styled.div`
 `;
 
 const SearchWrapper = styled.div`
-  margin-top: 60px;
+  margin-top: 30px;
   padding: 0px 30px 0px 0;
   @media screen and (max-width: 768px) {
     margin: 20px 0;
@@ -55,52 +57,43 @@ const InputSearch = styled.input`
 `;
 
 const ContentProducts = styled.div`
-  max-height: calc(100vh - 290px);
+  max-height: calc(100vh - 215px);
   overflow: scroll;
 `;
 
 export const Search = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
-  const [cart, setCart] = useState([]);
+  // Store
+  const stock = useStockStore((state) => state.stock);
+  const setStock = useStockStore((state) => state.setStock);
 
-  const [products, setProducts] = useState([]);
-  const [productsLegacy, setProductsLegacy] = useState([]);
+  // Filter value
+  const [filterName, setFilterName] = useState(null);
+
+  // Finder
+  const filteredData = useFinder(filterName, stock);
 
   useEffectOnce(() => {
-    db.collection("stock").onSnapshot((snap) => {
-      let documents = [];
-      snap.forEach((doc) => {
-        documents.push({ ...doc.data() });
+    if (!stock.length) {
+      getStock().then((response) => {
+        setStock([...response]);
       });
-      setProducts(documents);
-      setProductsLegacy(documents);
-    });
+    }
   }, []);
 
-  const searchProducts = (e) => {
-    setProductsLegacy([]);
-    const value = e.target.value;
-    const productsFiltered = products.filter((entry) =>
-      Object.values(entry).some(
-        (val) =>
-          typeof val === "string" &&
-          val.toLowerCase().includes(value.toLowerCase())
-      )
-    );
-    setProductsLegacy([]);
-    setProductsLegacy(productsFiltered);
-  };
+  // Cart
+  const [cart, setCart] = useState([]);
 
   return (
     <WrapperContent>
       <SearchWrapper>
         <InputSearch
           placeholder="Buscar producto..."
-          onChange={(e) => searchProducts(e)}
+          onChange={(e) => setFilterName(e.target.value)}
         />
         <DescriptionContent>
-          {productsLegacy.length} Productos encontrados
+          {filteredData.length} Productos encontrados
         </DescriptionContent>
         <Content>
           <HeaderInfo>
@@ -119,7 +112,7 @@ export const Search = () => {
             <div />
           </HeaderInfo>
           <ContentProducts>
-            {productsLegacy.map((product, index) => (
+            {filteredData.map((product, index) => (
               <ProductCard
                 product={product}
                 index={index}

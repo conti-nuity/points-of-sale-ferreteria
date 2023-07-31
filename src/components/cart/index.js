@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import IconBag from "../../assets/icons/shopping-bag.svg";
 import { ProductCart } from "./ProductCart";
 import { Modal } from "../../components/Modal";
 import { ConfirmationSell } from "../../components/ConfirmationSell";
@@ -94,6 +95,13 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  & img {
+    vertical-align: text-bottom;
+    margin-right: 4px;
+  }
+  & h2 {
+    display: inline-flex;
+  }
   & div button {
     margin: 0;
     font-family: "Jost";
@@ -156,6 +164,7 @@ export const Cart = ({ cart, setCart }) => {
     <CarContent>
       <Header>
         <div>
+          <img src={IconBag} alt="canasta" />
           <h2>Canasta</h2>
         </div>
         <div>
@@ -188,7 +197,7 @@ export const Cart = ({ cart, setCart }) => {
         <TotalContent>
           <div>
             <Field>
-              <label>Monto ingresado</label>
+              <label>$ Monto ingresado</label>
               <input
                 readOnly={cart.length > 0 ? false : true}
                 name="entry"
@@ -200,7 +209,7 @@ export const Cart = ({ cart, setCart }) => {
           </div>
           <div>
             <Field>
-              <label>Cambio</label>
+              <label>$ Cambio</label>
               <input
                 type="number"
                 value={entry > 0 && (entry - total).toFixed(2)}

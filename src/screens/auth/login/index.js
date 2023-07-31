@@ -41,7 +41,7 @@ export const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    itsLogin && navigate("/dashboard");
+    itsLogin && navigate("/search");
   }, []);
 
   const {
@@ -60,7 +60,7 @@ export const Login = () => {
       .then((response) => {
         localStorage.setItem("itsLogin", true);
         setLoading(false);
-        navigate("/dashboard");
+        navigate("/search");
       })
       .catch((error) => {
         console.log("error", error);

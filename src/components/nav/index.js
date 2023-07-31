@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import styled from "styled-components";
 import IconHome from "../../assets/icons/home-icon.svg";
 import IconSearch from "../../assets/icons/search-icon.svg";
 import IconInventory from "../../assets/icons/inventory-icon.svg";
@@ -8,6 +9,14 @@ import IconClipboard from "../../assets/icons/clipboard-icon.svg";
 import logo from "../../assets/images/logo.png";
 import { Logo } from "../../styles/GlobalStyles";
 import { Wrapper, Content, ItemNavegation } from "./styles";
+
+const Nav = styled.div`
+  height: 100vh;
+  position: sticky;
+  top: 0px;
+  background-color: rgb(255, 255, 255);
+  border-right: 1px solid rgba(189, 205, 214, 0.59);
+`;
 
 export const Navegation = ({ hideNavegation, setHideNavegation }) => {
   const navigate = useNavigate();
@@ -38,13 +47,7 @@ export const Navegation = ({ hideNavegation, setHideNavegation }) => {
   return (
     <>
       {!hideNavegation && (
-        <div
-          style={{
-            height: "100vh",
-            backgroundColor: "#fff",
-            borderRight: "1px solid #bdcdd696",
-          }}
-        >
+        <Nav>
           <div>
             <Logo src={logo} />
           </div>
@@ -82,7 +85,7 @@ export const Navegation = ({ hideNavegation, setHideNavegation }) => {
               </ItemNavegation>
             </Content>
           </Wrapper>
-        </div>
+        </Nav>
       )}
     </>
   );

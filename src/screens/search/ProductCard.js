@@ -85,12 +85,13 @@ export const ProductCard = ({ product, index, cart, setCart }) => {
   }, [product]);
 
   return (
-    <Card stockAvailable={product.stock > 0 ? true : false}>
+    <Card stockAvailable={parseFloat(product.stock) > 0 ? true : false}>
       <div>
         <p>{product.name}</p>
+        {/* <small>{product.uuid}</small> */}
       </div>
       <div>
-        {product.is_product_variable[0] === "1" ? (
+        {product?.is_product_variable[0] === "1" ? (
           <ContentInput>
             {!changePrice && (
               <>
@@ -115,7 +116,7 @@ export const ProductCard = ({ product, index, cart, setCart }) => {
             )}
           </ContentInput>
         ) : (
-          <p>${product.sell_price}</p>
+          <p>${product?.sell_price}</p>
         )}
       </div>
       <div>

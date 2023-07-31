@@ -1,16 +1,12 @@
 import { db } from "../firebase";
 import { getRandomArbitrary } from "../utils/funcitons";
 
-export const addProducttoInventory = (dataForm) => {
-  let uuid = getRandomArbitrary(2, 3000000);
-
+export const addProducttoInventory = (dataForm, uuid) => {
   return new Promise((resolve, reject) => {
     db.collection("stock")
       .doc(`${uuid}`)
       .set({
         ...dataForm,
-        created_at: new window.Date(),
-        uuid,
       })
       .then((response) => {
         resolve(response);
@@ -97,18 +93,24 @@ export const getReport = (collection, star_date, end_date) => {
   });
 };
 
-export const getSales = (star_date, end_date) => {
+export const getSales = (uuid, star_date, end_date) => {
   return new Promise((resolve, reject) => {
+    console.log("Run get sales...");
     db.collection("sales")
-      .where("created_at", ">", star_date)
-      .where("created_at", "<", end_date)
-      .onSnapshot((snap) => {
-        let response = [];
-        snap.forEach((doc) => {
-          response.push({ ...doc.data() });
-        });
-        resolve(response);
-      });
+      .doc(uuid)
+      .then((res) => {
+        resolve(res.data());
+      })
+      .catch((error) => reject(error));
+    // .where("created_at", ">", star_date)
+    // .where("created_at", "<", end_date)
+    // .onSnapshot((snap) => {
+    //   let response = [];
+    //   snap.forEach((doc) => {
+    //     response.push({ ...doc.data() });
+    //   });
+    //   resolve(response);
+    // });
   });
 };
 

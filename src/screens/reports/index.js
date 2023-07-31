@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { ExportToCsv } from "export-to-csv";
+import React, { useState } from "react";
 import moment from "moment";
 import styled from "styled-components";
 import {
@@ -8,10 +7,6 @@ import {
   TitleContent,
   DescriptionContent,
 } from "../../styles";
-
-import IconInventory from "../../assets/icons/inventory-icon.svg";
-import IconCosts from "../../assets/icons/costs-icon.svg";
-import IconClipboard from "../../assets/icons/clipboard-icon.svg";
 import { Modal } from "../../components/Modal";
 import { DateRange } from "../../components/DateRange";
 import { getReport } from "../../api/actions";

@@ -123,13 +123,6 @@ const RemoveButton = styled.button`
 
 export const SalesCard = ({
   created_at,
-  dealer_price,
-  is_product_variable,
-  its_profile,
-  name,
-  sell_pirce,
-  stock,
-  unit_measure,
   uuid,
   products,
   salesToday,
@@ -159,23 +152,20 @@ export const SalesCard = ({
   };
 
   const deleteSaleHandle = () => {
-    console.log("products", products);
-    console.log("stock", stock);
-    // deleteSale(uuid)
-    //   .then((res) => {
-    //     const salesTodayFiltered = salesToday.filter(
-    //       (sale) => sale.uuid !== uuid
-    //     );
-
-    //     products.map((product) => {
-    //       updateStock(product.uuid, product.purchased_amount)
-    //         .then(() => {
-    //           setSalesToday(salesTodayFiltered);
-    //         })
-    //         .catch((error) => console.log(error));
-    //     });
-    //   })
-    //   .catch((error) => console.log(error));
+    deleteSale(uuid)
+      .then(() => {
+        const salesTodayFiltered = salesToday.filter(
+          (sale) => sale.uuid !== uuid
+        );
+        products.map((product) => {
+          updateStock(product.uuid, product.purchased_amount)
+            .then(() => {
+              setSalesToday(salesTodayFiltered);
+            })
+            .catch((error) => console.log(error));
+        });
+      })
+      .catch((error) => console.log(error));
   };
 
   return (

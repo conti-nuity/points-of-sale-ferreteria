@@ -30,13 +30,13 @@ export const Gearbox = ({ total, setGeneratedTicket }) => {
     <Wrapper>
       <div>
         <Field>
-          <label>Monto ingresado</label>
+          <label>$ Monto ingresado</label>
           <input name="entry" onChange={(e) => handleChange(e)} type="number" />
         </Field>
       </div>
       <div>
         <Field>
-          <label>Cambio</label>
+          <label>$ Cambio</label>
           <input type="number" value={entry - total} />
         </Field>
       </div>

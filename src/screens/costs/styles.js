@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const InventoryWrapper = styled.div`
-  margin-top: 60px;
+  margin-top: 30px;
   padding: 0px 30px 0px 0;
   @media screen and (max-width: 768px) {
     margin: 20px 0;
