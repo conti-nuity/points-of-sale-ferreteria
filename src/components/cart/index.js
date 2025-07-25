@@ -23,16 +23,17 @@ const FooterCart = styled.div`
   bottom: 25px;
   & button {
     margin-top: 20px;
-    background-color: ${({ enableButton }) =>
-      enableButton ? "#4b88ee" : "#b1b1b1"};
+    background-color: #4b88ee;
+    /* background-color: ${({ enableButton }) =>
+      enableButton ? "#4b88ee" : "#b1b1b1"}; */
     color: #fff;
     border: none;
     width: 100%;
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
-    pointer-events: ${({ enableButton }) =>
-      enableButton ? "initial" : "none"};
+    /* pointer-events: ${({ enableButton }) =>
+      enableButton ? "initial" : "none"}; */
   }
 `;
 
@@ -173,6 +174,7 @@ export const Cart = ({ cart, setCart }) => {
           </button>
         </div>
       </Header>
+      {console.log("cart", cart)}
       <div>
         {cart.length ? (
           <>

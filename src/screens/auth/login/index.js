@@ -101,7 +101,7 @@ export const Login = () => {
         </Form>
       </Content>
       <div>
-        <Legend>Puntos de venta Ferretería y Perfiles "Glorieta" v1.0.0</Legend>
+        <Legend>Puntos de venta Ferretería y Perfiles "Glorieta" v2.0.0</Legend>
       </div>
     </div>
   );

@@ -29,3 +29,18 @@ export const updateStock = (product) => {
       });
   });
 };
+
+export const deleteProductOfStock = (uuid) => {
+  return new Promise((resolve, reject) => {
+    db.collection("stock")
+      .doc(`${uuid}`)
+      .delete()
+      .then(() => {
+        resolve(uuid);
+      })
+      .catch((error) => {
+        console.log("Error change stock...", error);
+        reject(error);
+      });
+  });
+};

@@ -18,6 +18,23 @@ const Nav = styled.div`
   border-right: 1px solid rgba(189, 205, 214, 0.59);
 `;
 
+const ContentLogo = styled.div`
+  background-color: #dddddd94;
+  width: 150px;
+  height: 150px;
+  margin: 30px auto 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+`;
+
+const Sede = styled.p`
+  text-align: center;
+  color: #f95454;
+  font-weight: 600;
+  font-size: 18px;
+`;
+
 export const Navegation = ({ hideNavegation, setHideNavegation }) => {
   const navigate = useNavigate();
   const location = useLocation().pathname.substring(1);
@@ -48,9 +65,10 @@ export const Navegation = ({ hideNavegation, setHideNavegation }) => {
     <>
       {!hideNavegation && (
         <Nav>
-          <div>
+          <ContentLogo>
             <Logo src={logo} />
-          </div>
+            <Sede>Glorieta</Sede>
+          </ContentLogo>
           <Wrapper>
             <Content>
               <ItemNavegation active={location === "dashboard" ? true : false}>

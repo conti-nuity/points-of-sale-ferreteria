@@ -156,7 +156,7 @@ export const ProductCart = ({ index, product, cart, setCart }) => {
               <button onClick={() => uploadQuantityAdded("minus", index)}>
                 -
               </button>
-              <p>{quantityAdded}</p>
+              <p>{product.quantityAdded}</p>
               <button onClick={() => uploadQuantityAdded("plus", index)}>
                 +
               </button>

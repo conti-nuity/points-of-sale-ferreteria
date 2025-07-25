@@ -11,7 +11,25 @@ import { useStockStore } from "../../store";
 import { useFinder } from "../../hooks/useFinder";
 
 const Content = styled.div`
-  margin-top: 30px;
+  margin-top: 10px;
+`;
+
+const Flex = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+`;
+
+const Title = styled.h1`
+  color: #000;
+  font-family: "Poppins";
+  font-weight: 500;
+  font-size: 28px;
+  & span {
+    color: #f95454;
+    font-weight: 600;
+  }
 `;
 
 const HeaderInfo = styled.div`
@@ -43,15 +61,17 @@ const SearchWrapper = styled.div`
 
 const InputSearch = styled.input`
   width: 100%;
-  font-size: 37px;
-  border: none;
+  font-size: 13px;
+  border-radius: 5px;
+  border: 1px solid grey;
+  padding: 12px;
   background: transparent;
   font-family: "Poppins";
-  font-weight: 500;
+  font-weight: 400;
   color: #000;
+  margin-bottom: 10px;
   &:focus-visible {
     outline: none;
-    border: none;
     box-shadow: none;
   }
 `;
@@ -88,13 +108,18 @@ export const Search = () => {
   return (
     <WrapperContent>
       <SearchWrapper>
+        <Flex>
+          <Title>
+            Buscar Producto <span> Glorieta </span>
+          </Title>
+          <DescriptionContent>
+            {filteredData.length} Productos encontrados
+          </DescriptionContent>
+        </Flex>
         <InputSearch
-          placeholder="Buscar producto..."
+          placeholder="Escribe el nombre del producto"
           onChange={(e) => setFilterName(e.target.value)}
         />
-        <DescriptionContent>
-          {filteredData.length} Productos encontrados
-        </DescriptionContent>
         <Content>
           <HeaderInfo>
             <div>

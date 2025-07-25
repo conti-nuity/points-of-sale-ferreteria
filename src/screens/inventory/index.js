@@ -10,7 +10,24 @@ import { ProductCard } from "./ProductCard";
 import { useStockStore } from "../../store";
 
 const Content = styled.div`
-  margin-top: 60px;
+  margin-top: 20px;
+`;
+
+const InputSearch = styled.input`
+  width: 100%;
+  font-size: 13px;
+  border-radius: 5px;
+  border: 1px solid grey;
+  padding: 12px;
+  background: transparent;
+  font-family: "Poppins";
+  font-weight: 400;
+  color: #000;
+  margin-top: 12px;
+  &:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
 `;
 
 const HeaderInfo = styled.div`
@@ -35,20 +52,6 @@ const StockLength = styled.p`
   font-size: 13px;
   font-weight: 400;
   color: #000;
-`;
-
-const Input = styled.input`
-  position: sticky;
-  top: 20px;
-  margin-top: 20px;
-  padding: 17px;
-  width: 100%;
-  border-radius: 6px;
-  border: none;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0), 0 4px 8px rgba(0, 0, 0, 0.03);
-  @media screen and (max-width: 768px) {
-    width: 100%;
-  }
 `;
 
 export const Inventory = () => {
@@ -99,7 +102,7 @@ export const Inventory = () => {
           Inventario del mes de {monthMinusOneName} del{" "}
           {new window.Date().getFullYear()}
         </Description>
-        <Input
+        <InputSearch
           placeholder="Buscar producto..."
           onChange={(e) => setFilterName(e.target.value)}
         />

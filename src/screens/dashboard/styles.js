@@ -13,7 +13,7 @@ export const Title = styled.h1`
   color: #000;
   font-family: "Poppins";
   font-weight: 500;
-  font-size: 37px;
+  font-size: 32px;
 `;
 
 export const Description = styled.p`

@@ -1,13 +1,11 @@
 import { db } from "../firebase";
 
-export const addSale = (uuid, sales) => {
-  console.log("uuid", uuid);
-  console.log("sales", sales);
+export const addSale = (uuid, sale) => {
   return new Promise((resolve, reject) => {
-    console.log("Run add sale...");
+    console.log("Run add sale...", uuid);
     db.collection("sales")
       .doc(uuid)
-      .set({ sales: sales })
+      .set(sale)
       .then((res) => {
         resolve(uuid);
       })

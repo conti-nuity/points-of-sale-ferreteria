@@ -1,4 +1,8 @@
 import styled from "styled-components";
+import { deleteProductOfStock } from "../../api/stock";
+import { toastModel } from "../../utils/toast";
+import { useStockStore } from "../../store";
+import { Toaster, toast } from "sonner";
 
 const Card = styled.div`
   display: grid;
@@ -32,9 +36,29 @@ const Card = styled.div`
   }
 `;
 
-export const ProductCard = ({ product, productEdit }) => {
+export const ProductCard = ({ product, productEdit, key }) => {
+  // Store
+  const stock = useStockStore((state) => state.stock);
+  const setStock = useStockStore((state) => state.setStock);
+
+  const deleteProductHandler = (uuid) => {
+    deleteProductOfStock(uuid)
+      .then(() => {
+        toast.success("Producto Eliminado!", {
+          ...toastModel,
+        });
+        const new_stock = stock.filter((product) => product.uuid !== uuid);
+        setStock(new_stock);
+      })
+      .catch(() => {
+        toast.error("Ocurrio un error, intentalo más tarde!", {
+          ...toastModel,
+        });
+      });
+  };
+
   return (
-    <Card>
+    <Card key={product.name}>
       <div>
         <p>{product.name}</p>
       </div>
@@ -49,6 +73,15 @@ export const ProductCard = ({ product, productEdit }) => {
       <div>
         <span onClick={() => productEdit(product)}>Editar</span>
       </div>
+      <div>
+        <span
+          style={{ color: "red" }}
+          onClick={() => deleteProductHandler(product.uuid)}
+        >
+          Eliminar
+        </span>
+      </div>
+      <Toaster position="bottom-right" />
     </Card>
   );
 };

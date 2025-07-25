@@ -15,19 +15,18 @@ export const Dashboard = () => {
     const endDate = new window.Date();
     startDate.setHours(0, 0, 0, 0);
     endDate.setHours(24, 0, 0, 0);
-    console.log("startDate", startDate);
-    // if (!sales.length) {
-    //   getSales(startDate, endDate).then((response) => {
-    //     setSales([...response]);
-    //   });
-    // }
+    if (!sales.length) {
+      getSales(startDate, endDate).then((response) => {
+        setSales([...response]);
+      });
+    }
   }, []);
 
   return (
     <Wrapper>
-      <Title>Ventas de hoy...</Title>
+      <Title>Ventas de hoy</Title>
       <Description> {moment(new window.Date()).format("LL")}</Description>
-      <SalesList salesToday={sales} />
+      <SalesList salesToday={sales} setSalesToday={setSales} />
     </Wrapper>
   );
 };

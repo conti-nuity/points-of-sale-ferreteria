@@ -5,6 +5,7 @@ import { separator } from "../../utils/funcitons";
 import { ProductCard } from "./ProductCard";
 import { deleteSale, updateStock } from "../../api/actions";
 import { Toaster, toast } from "sonner";
+import { useStockStore } from "../../store";
 
 const Card = styled.div`
   margin-bottom: 15px;
@@ -132,6 +133,9 @@ export const SalesCard = ({
 
   const [total, setTotal] = useState(0);
 
+  const stock = useStockStore((state) => state.stock);
+  const setStock = useStockStore((state) => state.setStock);
+
   useEffect(() => {
     if (products.length > 0) {
       const totalPriceOfAllProducts = products.map(
@@ -152,14 +156,26 @@ export const SalesCard = ({
   };
 
   const deleteSaleHandle = () => {
+    let _stock = stock;
+
     deleteSale(uuid)
       .then(() => {
         const salesTodayFiltered = salesToday.filter(
           (sale) => sale.uuid !== uuid
         );
         products.map((product) => {
+          for (var i = 0; i < _stock.length; i++) {
+            if (_stock[i].name === product.name) {
+              _stock[i].stock =
+                parseFloat(_stock[i].stock) +
+                parseFloat(product.purchased_amount);
+              break;
+            }
+          }
+
           updateStock(product.uuid, product.purchased_amount)
             .then(() => {
+              setStock(_stock);
               setSalesToday(salesTodayFiltered);
             })
             .catch((error) => console.log(error));

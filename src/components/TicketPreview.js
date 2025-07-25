@@ -4,6 +4,7 @@ import { useEffectOnce } from "../utils/useEffectOnce";
 import { useParams } from "react-router-dom";
 import { getSale } from "../api/actions";
 import logo from "../assets/images/logo.png";
+import whatsApp from "../assets/images/whatsapp.svg";
 import { Logo } from "../styles/GlobalStyles";
 import moment from "moment";
 
@@ -37,12 +38,24 @@ export const TicketPreview = () => {
           <p class="centrado" style={{ fontSize: "11px" }}>
             TEL: 555644-8728 y 557044-0651
           </p>
+          <p class="centrado" style={{ fontSize: "11px" }}>
+            <img
+              src={whatsApp}
+              width="12px"
+              height="12px"
+              style={{ verticalAlign: "middle", marginRight: "2px" }}
+            />
+            5574497706
+          </p>
           <p style={{ fontSize: "11px" }}>R.F.C JIGR630601KA5</p>
           {/* <p style={{ fontSize: "11px" }}>
             Perfiles, lamina lisa, galvanizada y ondulada, tira de cortina y
             todo para la herrería, artículos de plomería, tubería
           </p> */}
         </div>
+        <p class="centrado" style={{ fontSize: "11px", margin: "2px 0" }}>
+          Av Mani MZ 806 LT 11 Pedregal de San Nicolas, Tlapan, CDMX
+        </p>
         <p
           class="centrado"
           style={{
@@ -54,6 +67,7 @@ export const TicketPreview = () => {
         >
           TICKET N.º {ticket_id}
         </p>
+        {/* <p class="centrado">Servicio a domicilio</p> */}
         <p class="centrado" style={{ fontSize: "11px", margin: "0px 0" }}>
           Fecha:{" "}
           {moment(
@@ -112,10 +126,6 @@ export const TicketPreview = () => {
       <hr />
       <div style={{ marginTop: "10px", fontSize: "11px" }}>
         <p class="centrado">¡GRACIAS POR SU COMPRA!</p>
-        <p class="centrado">
-          Av Mani MZ 8065 LT 11 Pedregal de San Nicolas, Tlapan, CDMX
-        </p>
-        <p class="centrado">Servicio a domicilio</p>
       </div>
       <br />
       <br />

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { getRandomArbitrary } from "../utils/funcitons";
-import { useSalesStore } from "../store";
+import { useSalesStore, useStockStore } from "../store";
 import { addSale } from "../api/sales";
 import { updateStock } from "../api/stock";
 
@@ -63,6 +63,9 @@ export const ConfirmationSell = ({
   const sales = useSalesStore((state) => state.sales);
   const setSales = useSalesStore((state) => state.setSales);
 
+  const stock = useStockStore((state) => state.stock);
+  const setStock = useStockStore((state) => state.setStock);
+
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
 
@@ -109,15 +112,24 @@ export const ConfirmationSell = ({
     };
 
     // Add new sale
-    addSale(saleId, [sale, ...sales])
+    addSale(uuid, sale)
       .then(() => {
         // Change sales stock
         setSales([{ ...sale }, ...sales]);
+        let _stock = stock;
         cart.map((product) => {
+          // Change Stock Store
+          for (var i = 0; i < _stock.length; i++) {
+            if (_stock[i].name === product.name) {
+              _stock[i].stock = product.stock - product.quantityAdded;
+              break;
+            }
+          }
           // Change Stock
           if (product.index >= 0) {
             updateStock(product)
               .then(() => {
+                setStock(_stock);
                 cleanCart();
                 withTicket ? setLoading2(false) : setLoading1(false);
                 setShowModal(false);

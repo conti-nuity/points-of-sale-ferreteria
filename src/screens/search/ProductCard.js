@@ -85,7 +85,10 @@ export const ProductCard = ({ product, index, cart, setCart }) => {
   }, [product]);
 
   return (
-    <Card stockAvailable={parseFloat(product.stock) > 0 ? true : false}>
+    <Card
+      stockAvailable={parseFloat(product.stock) > 0 ? true : false}
+      key={product.name}
+    >
       <div>
         <p>{product.name}</p>
         {/* <small>{product.uuid}</small> */}

@@ -149,11 +149,10 @@ export const AddInventoryForm = ({ product, setShowModal }) => {
           );
         });
     } else {
-      // console.log("dataForm", dataForm);
       let uuid = getRandomArbitrary(2, 3000000);
       const new_product = { created_at: new window.Date(), uuid, ...dataForm };
       const new_stock = [{ ...new_product }, ...stock];
-      addProducttoInventory(new_product)
+      addProducttoInventory(new_product, uuid)
         .then((response) => {
           setStock(new_stock);
           reset();

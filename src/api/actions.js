@@ -93,24 +93,19 @@ export const getReport = (collection, star_date, end_date) => {
   });
 };
 
-export const getSales = (uuid, star_date, end_date) => {
+export const getSales = (star_date, end_date) => {
   return new Promise((resolve, reject) => {
     console.log("Run get sales...");
     db.collection("sales")
-      .doc(uuid)
-      .then((res) => {
-        resolve(res.data());
-      })
-      .catch((error) => reject(error));
-    // .where("created_at", ">", star_date)
-    // .where("created_at", "<", end_date)
-    // .onSnapshot((snap) => {
-    //   let response = [];
-    //   snap.forEach((doc) => {
-    //     response.push({ ...doc.data() });
-    //   });
-    //   resolve(response);
-    // });
+      .where("created_at", ">", star_date)
+      .where("created_at", "<", end_date)
+      .onSnapshot((snap) => {
+        let response = [];
+        snap.forEach((doc) => {
+          response.push({ ...doc.data() });
+        });
+        resolve(response);
+      });
   });
 };
 

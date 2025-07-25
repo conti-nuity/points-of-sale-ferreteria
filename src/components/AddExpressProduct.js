@@ -21,7 +21,7 @@ const Title = styled.h2`
 `;
 
 const Desc = styled.p`
-  margin-bottom: 50px;
+  margin-bottom: 30px;
   /* margin: 10px auto 40px; */
   font-size: 13px;
   text-align: center;
